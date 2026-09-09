@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberRisk AI — Executive Dashboard</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">CR</span>
+    <div>
+      <h1>CyberRisk AI</h1>
+      <p>Continuous Cyber Risk Quantification &amp; Investment Optimization — SIH26105</p>
+    </div>
+  </div>
+  <div class="topbar-status">
+    <span id="dataStatus" class="status-pill">Loading data…</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="dashboard">Executive Dashboard</button>
+  <button class="tab-btn" data-tab="assets">Asset Risk Table</button>
+  <button class="tab-btn" data-tab="optimizer">Investment Optimizer</button>
+  <button class="tab-btn" data-tab="analyst">AI Risk Analyst</button>
+  <button class="tab-btn" data-tab="simulator">Scenario Simulator</button>
+</nav>
+
+<main>
+
+  <!-- ============ 1. EXECUTIVE DASHBOARD ============ -->
+  <section id="dashboard" class="tab-panel active">
+    <div class="card-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Expected Annual Loss</span>
+        <span class="stat-value" id="statEAL">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Financial Exposure</span>
+        <span class="stat-value" id="statExposure">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">High-Risk Assets</span>
+        <span class="stat-value" id="statHighRisk">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Recommended Investment</span>
+        <span class="stat-value" id="statRecommended">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Estimated Risk Reduction</span>
+        <span class="stat-value" id="statRiskReduction">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">ROSI</span>
+        <span class="stat-value" id="statROSI">—</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Executive Summary</h2>
+      <p id="execSummary" class="muted">Loading executive summary…</p>
+    </div>
+
+    <div class="chart-grid">
+      <div class="panel chart-card">
+        <h3>Risk by Asset (Expected Annual Loss)</h3>
+        <canvas id="chartRiskByAsset"></canvas>
+      </div>
+      <div class="panel chart-card">
+        <h3>Financial Exposure Distribution</h3>
+        <canvas id="chartExposureDistribution"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. ASSET RISK TABLE ============ -->
+  <section id="assets" class="tab-panel">
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Asset Risk Table</h2>
+        <button id="refreshAssetsBtn" class="btn-secondary">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table id="assetTable">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Asset</th>
+              <th>Type</th>
+              <th>Financial Impact</th>
+              <th>Residual Probability</th>
+              <th>EAL / year</th>
+              <th>Risk Score</th>
+            </tr>
+          </thead>
+          <tbody id="assetTableBody">
+            <tr><td colspan="7" class="muted">Loading assets…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. INVESTMENT OPTIMIZER ============ -->
+  <section id="optimizer" class="tab-panel">
+    <div class="panel">
+      <h2>Investment Optimizer</h2>
+      <p class="muted">Enter a budget and the optimizer will select the combination of security investments that maximizes total risk reduction (0/1 knapsack).</p>
+      <div class="form-row">
+        <label for="budgetInput">Budget (₹)</label>
+        <input type="number" id="budgetInput" value="1000000" min="0" step="10000" />
+        <button id="optimizeBtn" class="btn-primary">Optimize</button>
+      </div>
+
+      <div class="card-grid" id="optimizeResultCards" style="display:none;">
+        <div class="stat-card">
+          <span class="stat-label">Total Investment</span>
+          <span class="stat-value" id="optTotalCost">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Estimated Risk Reduction</span>
+          <span class="stat-value" id="optRiskReduction">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Remaining Budget</span>
+          <span class="stat-value" id="optRemaining">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">ROSI</span>
+          <span class="stat-value" id="optROSI">—</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="investmentTable">
+          <thead>
+            <tr>
+              <th>Selected</th>
+              <th>Investment</th>
+              <th>Description</th>
+              <th>Cost</th>
+              <th>Risk Reduction</th>
+              <th>ROSI</th>
+            </tr>
+          </thead>
+          <tbody id="investmentTableBody">
+            <tr><td colspan="6" class="muted">Loading investments…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel chart-card">
+        <h3>Investment vs Risk Reduction</h3>
+        <canvas id="chartInvestmentVsReduction"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. AI RISK ANALYST ============ -->
+  <section id="analyst" class="tab-panel">
+    <div class="panel">
+      <h2>AI Risk Analyst</h2>
+      <p class="muted">Ask a question about your calculated cyber risk. The AI explains numbers already produced by the risk engine — it never invents figures.</p>
+
+      <div class="quick-questions" id="quickQuestions">
+        <button class="chip">What is our highest financial cyber risk?</button>
+        <button class="chip">Which vulnerabilities contribute most to our expected losses?</button>
+        <button class="chip">What should we fix first?</button>
+        <button class="chip">Why is the banking server high-risk?</button>
+        <button class="chip">What happens if MFA is implemented?</button>
+      </div>
+
+      <div class="form-row">
+        <input type="text" id="questionInput" placeholder="Ask the AI Risk Analyst a question…" />
+        <button id="askBtn" class="btn-primary">Ask</button>
+      </div>
+
+      <div id="aiAnswerBox" class="panel answer-box" style="display:none;">
+        <div class="answer-meta" id="aiAnswerSource"></div>
+        <div id="aiAnswerText"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. SCENARIO SIMULATOR ============ -->
+  <section id="simulator" class="tab-panel">
+    <div class="panel">
+      <h2>Scenario Simulator</h2>
+      <p class="muted">Simulate the effect of a security initiative on total Expected Annual Loss. Uses the exact same risk engine as the rest of the platform.</p>
+
+      <div class="form-row">
+        <label for="scenarioSelect">Scenario</label>
+        <select id="scenarioSelect">
+          <option value="mfa">Implement Multi-Factor Authentication (MFA)</option>
+          <option value="patch">Patch Critical Vulnerabilities</option>
+          <option value="segmentation">Network Segmentation</option>
+          <option value="delay">Delay Remediation by 30 Days</option>
+        </select>
+        <button id="simulateBtn" class="btn-primary">Simulate</button>
+      </div>
+
+      <div class="card-grid" id="simResultCards" style="display:none;">
+        <div class="stat-card">
+          <span class="stat-label">EAL Before</span>
+          <span class="stat-value" id="simBefore">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">EAL After</span>
+          <span class="stat-value" id="simAfter">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Risk Reduction</span>
+          <span class="stat-value" id="simReduction">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">% Reduction</span>
+          <span class="stat-value" id="simPercent">—</span>
+        </div>
+      </div>
+
+      <div class="panel chart-card">
+        <h3>Before vs After Risk</h3>
+        <canvas id="chartBeforeAfter"></canvas>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Prototype for SIH26105 — synthetic data only. Built with Node.js, Express, and Chart.js.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

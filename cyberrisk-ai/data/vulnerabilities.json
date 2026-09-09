@@ -1,0 +1,146 @@
+[
+  {
+    "id": "V001",
+    "name": "SQL Injection in Login Form",
+    "assetId": "A004",
+    "severity": 5,
+    "category": "Injection",
+    "description": "Unsanitized input in the payment gateway login form allows SQL injection, potentially exposing transaction data.",
+    "status": "Open"
+  },
+  {
+    "id": "V002",
+    "name": "Outdated TLS Configuration",
+    "assetId": "A004",
+    "severity": 4,
+    "category": "Weak Cryptography",
+    "description": "Payment Gateway API still accepts TLS 1.0/1.1, allowing downgrade attacks on data in transit.",
+    "status": "Open"
+  },
+  {
+    "id": "V003",
+    "name": "Missing MFA on Admin Accounts",
+    "assetId": "A001",
+    "severity": 5,
+    "category": "Access Control",
+    "description": "Privileged administrator accounts on the Banking Server do not require multi-factor authentication.",
+    "status": "Open"
+  },
+  {
+    "id": "V004",
+    "name": "Unpatched Operating System",
+    "assetId": "A001",
+    "severity": 4,
+    "category": "Patch Management",
+    "description": "Banking Server is running an OS build missing critical security patches (simulated CVE-2024-SYNTH-01).",
+    "status": "Open"
+  },
+  {
+    "id": "V005",
+    "name": "Weak Database Credentials",
+    "assetId": "A002",
+    "severity": 4,
+    "category": "Access Control",
+    "description": "Customer Database uses default/weak service account credentials for administrative access.",
+    "status": "Open"
+  },
+  {
+    "id": "V006",
+    "name": "Unencrypted Data at Rest",
+    "assetId": "A002",
+    "severity": 3,
+    "category": "Data Protection",
+    "description": "Sensitive customer records are stored without disk-level or field-level encryption.",
+    "status": "Open"
+  },
+  {
+    "id": "V007",
+    "name": "Phishing-Susceptible Email Gateway",
+    "assetId": "A003",
+    "severity": 3,
+    "category": "Email Security",
+    "description": "Email gateway lacks advanced phishing/attachment sandboxing, increasing credential theft risk.",
+    "status": "Open"
+  },
+  {
+    "id": "V008",
+    "name": "Outdated Email Server Software",
+    "assetId": "A003",
+    "severity": 3,
+    "category": "Patch Management",
+    "description": "Mail server software is two major versions behind vendor security updates.",
+    "status": "Open"
+  },
+  {
+    "id": "V009",
+    "name": "Excessive Cloud Storage Bucket Permissions",
+    "assetId": "A006",
+    "severity": 4,
+    "category": "Misconfiguration",
+    "description": "Cloud File Storage buckets are configured with overly broad read/write permissions.",
+    "status": "Open"
+  },
+  {
+    "id": "V010",
+    "name": "Outdated CMS Plugins",
+    "assetId": "A007",
+    "severity": 3,
+    "category": "Patch Management",
+    "description": "Corporate Website CMS plugins have known unpatched vulnerabilities.",
+    "status": "Open"
+  },
+  {
+    "id": "V011",
+    "name": "Cross-Site Scripting (XSS)",
+    "assetId": "A007",
+    "severity": 3,
+    "category": "Injection",
+    "description": "Reflected XSS vulnerability found in the website's search and contact forms.",
+    "status": "Open"
+  },
+  {
+    "id": "V012",
+    "name": "Legacy Authentication Protocol",
+    "assetId": "A008",
+    "severity": 3,
+    "category": "Access Control",
+    "description": "Internal ERP System still supports a legacy, unencrypted authentication protocol.",
+    "status": "Open"
+  },
+  {
+    "id": "V013",
+    "name": "Unrestricted VPN Split Tunneling",
+    "assetId": "A009",
+    "severity": 4,
+    "category": "Network Security",
+    "description": "VPN Gateway allows split tunneling, letting remote traffic bypass corporate security controls.",
+    "status": "Open"
+  },
+  {
+    "id": "V014",
+    "name": "Default Router Credentials",
+    "assetId": "A010",
+    "severity": 3,
+    "category": "Access Control",
+    "description": "Branch Office Router is still using vendor default administrative credentials.",
+    "status": "Open"
+  },
+  {
+    "id": "V015",
+    "name": "Missing Endpoint Detection & Response",
+    "assetId": "A011",
+    "severity": 3,
+    "category": "Endpoint Security",
+    "description": "Employee Laptop Fleet has no EDR agent deployed, delaying detection of malware/ransomware.",
+    "status": "Open"
+  },
+  {
+    "id": "V016",
+    "name": "Untested Backup Restore Process",
+    "assetId": "A012",
+    "severity": 2,
+    "category": "Business Continuity",
+    "description": "Backup & DR Server's restore procedure has not been tested in the last 12 months.",
+    "status": "Open"
+  }
+]
