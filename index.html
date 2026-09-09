@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberRisk AI — Continuous Cyber Risk Quantification &amp; Investment Optimization</title>
+
+<!-- Chart.js loaded via CDN (allowed — see project requirements) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =========================================================
+       TOP BAR
+       ========================================================= -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-icon">🛡️</span>
+      <div>
+        <h1>CyberRisk AI</h1>
+        <p>Continuous Cyber Risk Quantification &amp; Investment Optimization — SIH26105</p>
+      </div>
+    </div>
+    <div class="topbar-badge">All financial values are Prototype Estimates</div>
+  </header>
+
+  <div class="app-shell">
+
+    <!-- =========================================================
+         SIDEBAR NAVIGATION
+         ========================================================= -->
+    <nav class="sidebar" id="sidebar">
+      <button class="nav-item active" data-target="dashboard">
+        <span class="nav-icon">📊</span> Executive Dashboard
+      </button>
+      <button class="nav-item" data-target="assets">
+        <span class="nav-icon">🗂️</span> Asset Risk Table
+      </button>
+      <button class="nav-item" data-target="optimizer">
+        <span class="nav-icon">💰</span> Investment Optimizer
+      </button>
+      <button class="nav-item" data-target="ai-analyst">
+        <span class="nav-icon">🤖</span> AI Risk Analyst
+      </button>
+      <button class="nav-item" data-target="scenarios">
+        <span class="nav-icon">🧪</span> Scenario Simulator
+      </button>
+
+      <div class="sidebar-footer">
+        <button id="resetDataBtn" class="btn btn-outline btn-block">Reset Sample Data</button>
+      </div>
+    </nav>
+
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+    <main class="content">
+
+      <!-- ================= EXECUTIVE DASHBOARD ================= -->
+      <section id="dashboard" class="panel active">
+        <div class="panel-header">
+          <h2>Executive Dashboard</h2>
+          <p class="muted">Enterprise-wide cyber risk summary, calculated live from asset data.</p>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-label">Total Expected Annual Loss</div>
+            <div class="card-value" id="cardTotalEAL">--</div>
+            <div class="card-sub">Prototype Estimate</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Total Financial Exposure</div>
+            <div class="card-value" id="cardTotalExposure">--</div>
+            <div class="card-sub">Sum of all potential impact</div>
+          </div>
+          <div class="card">
+            <div class="card-label">High-Risk Assets</div>
+            <div class="card-value" id="cardHighRiskCount">--</div>
+            <div class="card-sub">Above the high-risk threshold</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Recommended Investment</div>
+            <div class="card-value" id="cardRecommendedInvestment">--</div>
+            <div class="card-sub">At current optimizer budget</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Estimated Risk Reduction</div>
+            <div class="card-value" id="cardRiskReduction">--</div>
+            <div class="card-sub">If recommendation is applied</div>
+          </div>
+          <div class="card">
+            <div class="card-label">ROSI</div>
+            <div class="card-value" id="cardROSI">--</div>
+            <div class="card-sub">Return on Security Investment</div>
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-box">
+            <h3>Risk by Asset (Expected Annual Loss)</h3>
+            <canvas id="chartRiskByAsset"></canvas>
+          </div>
+          <div class="chart-box">
+            <h3>Financial Exposure Distribution</h3>
+            <canvas id="chartExposureDistribution"></canvas>
+          </div>
+        </div>
+
+        <div class="panel-block">
+          <h3>Highest Financial Risk Asset</h3>
+          <p id="highestRiskSummary" class="muted">--</p>
+        </div>
+      </section>
+
+      <!-- ================= ASSET RISK TABLE ================= -->
+      <section id="assets" class="panel">
+        <div class="panel-header">
+          <h2>Asset Risk Table</h2>
+          <p class="muted">Edit values directly to see live risk recalculation. Data is saved automatically in your browser (localStorage).</p>
+        </div>
+
+        <div class="toolbar">
+          <button id="loadSampleBtn" class="btn btn-secondary">Load Sample Data</button>
+          <button id="addAssetBtn" class="btn btn-primary">+ Add New Asset</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="assetTable" class="data-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Criticality</th>
+                <th>Vuln. Severity</th>
+                <th>Exposure</th>
+                <th>Control Eff.</th>
+                <th>Financial Impact</th>
+                <th>Expected Annual Loss</th>
+                <th>Risk Score</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="assetTableBody">
+              <!-- rows injected by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= INVESTMENT OPTIMIZER ================= -->
+      <section id="optimizer" class="panel">
+        <div class="panel-header">
+          <h2>Investment Optimizer</h2>
+          <p class="muted">Enter a fixed budget to find the investment combination that maximizes estimated risk reduction (0/1 knapsack).</p>
+        </div>
+
+        <div class="toolbar optimizer-toolbar">
+          <label for="budgetInput">Available Budget</label>
+          <input type="number" id="budgetInput" value="1000000" min="0" step="10000" />
+          <button id="optimizeBtn" class="btn btn-primary">Optimize Budget</button>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-label">Total Investment</div>
+            <div class="card-value" id="optTotalInvestment">--</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Estimated Risk Reduction</div>
+            <div class="card-value" id="optRiskReduction">--</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Remaining Budget</div>
+            <div class="card-value" id="optRemainingBudget">--</div>
+          </div>
+          <div class="card">
+            <div class="card-label">ROSI</div>
+            <div class="card-value" id="optROSI">--</div>
+          </div>
+        </div>
+
+        <div class="panel-block">
+          <h3>Recommended Investments</h3>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Investment</th>
+                  <th>Cost</th>
+                  <th>Risk Reduction</th>
+                  <th>ROSI</th>
+                  <th>Selected?</th>
+                </tr>
+              </thead>
+              <tbody id="investmentTableBody">
+                <!-- rows injected by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="chart-grid single">
+          <div class="chart-box">
+            <h3>Investment vs Risk Reduction</h3>
+            <canvas id="chartInvestmentVsReduction"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= AI RISK ANALYST ================= -->
+      <section id="ai-analyst" class="panel">
+        <div class="panel-header">
+          <h2>AI Risk Analyst</h2>
+          <p class="muted">A rule-based analyst that explains YOUR calculated risk data in plain English. No API key or internet connection required.</p>
+        </div>
+
+        <div class="chat-suggestions" id="chatSuggestions">
+          <button class="chip" data-question="What is our highest financial cyber risk?">Highest financial risk?</button>
+          <button class="chip" data-question="Which vulnerabilities contribute most to our expected losses?">Top vulnerabilities?</button>
+          <button class="chip" data-question="What should we fix first?">What to fix first?</button>
+          <button class="chip" data-question="Why is the Banking Server high-risk?">Why is Banking Server risky?</button>
+          <button class="chip" data-question="What happens if MFA is implemented?">What if MFA is added?</button>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+          <div class="chat-message bot">
+            Hello! I'm your AI Risk Analyst. Ask me about your current cyber risk, or try one of the suggestions above.
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Ask a question about your cyber risk..." />
+          <button id="chatSendBtn" class="btn btn-primary">Send</button>
+        </div>
+      </section>
+
+      <!-- ================= SCENARIO SIMULATOR ================= -->
+      <section id="scenarios" class="panel">
+        <div class="panel-header">
+          <h2>Scenario Simulator</h2>
+          <p class="muted">Simulate the effect of a security decision using the same risk engine that powers the rest of the dashboard.</p>
+        </div>
+
+        <div class="scenario-grid" id="scenarioGrid">
+          <!-- scenario cards injected by app.js -->
+        </div>
+
+        <div class="panel-block" id="scenarioResult" style="display:none;">
+          <h3 id="scenarioResultTitle">Scenario Result</h3>
+          <p class="muted" id="scenarioResultDescription">--</p>
+
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-label">Before EAL</div>
+              <div class="card-value" id="scenarioBeforeEAL">--</div>
+            </div>
+            <div class="card">
+              <div class="card-label">After EAL</div>
+              <div class="card-value" id="scenarioAfterEAL">--</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Risk Reduction</div>
+              <div class="card-value" id="scenarioReduction">--</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Percentage Reduction</div>
+              <div class="card-value" id="scenarioPercentReduction">--</div>
+            </div>
+          </div>
+
+          <div class="chart-grid single">
+            <div class="chart-box">
+              <h3>Before vs After Risk</h3>
+              <canvas id="chartBeforeAfter"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================
+       ADD / EDIT ASSET MODAL
+       ========================================================= -->
+  <div class="modal-overlay" id="assetModalOverlay">
+    <div class="modal">
+      <h3 id="assetModalTitle">Add New Asset</h3>
+      <form id="assetForm">
+        <input type="hidden" id="assetFormId" />
+
+        <label>Name
+          <input type="text" id="assetFormName" required />
+        </label>
+
+        <label>Type
+          <input type="text" id="assetFormType" placeholder="e.g. Server, Database, Application" />
+        </label>
+
+        <div class="form-grid">
+          <label>Criticality (1-5)
+            <input type="number" id="assetFormCriticality" min="1" max="5" value="3" />
+          </label>
+          <label>Vulnerability Severity (1-5)
+            <input type="number" id="assetFormSeverity" min="1" max="5" value="3" />
+          </label>
+          <label>Exposure (1-5)
+            <input type="number" id="assetFormExposure" min="1" max="5" value="3" />
+          </label>
+          <label>Control Effectiveness (0-1)
+            <input type="number" id="assetFormControl" min="0" max="1" step="0.05" value="0.5" />
+          </label>
+        </div>
+
+        <div class="form-grid">
+          <label>Downtime Cost
+            <input type="number" id="assetFormDowntime" min="0" step="1000" value="50000" />
+          </label>
+          <label>Data Loss Cost
+            <input type="number" id="assetFormDataLoss" min="0" step="1000" value="100000" />
+          </label>
+          <label>Recovery Cost
+            <input type="number" id="assetFormRecovery" min="0" step="1000" value="30000" />
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="assetModalCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT — order matters (no modules, plain scripts)
+       data.js must load before riskEngine.js, which must load
+       before optimizer.js / scenarioSimulator.js / aiAnalyst.js,
+       and app.js loads LAST because it wires everything together.
+       ========================================================= -->
+  <script src="data.js"></script>
+  <script src="riskEngine.js"></script>
+  <script src="optimizer.js"></script>
+  <script src="scenarioSimulator.js"></script>
+  <script src="aiAnalyst.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
